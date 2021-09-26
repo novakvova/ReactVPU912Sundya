@@ -1,48 +1,89 @@
 import React, { Component } from 'react'
+import InputTextField from '../../common/InptTextField';
+import { validationFields } from './validation';
 
 export class RegisterPage extends Component {
     state = {
-        email: 'ss@dd.dd'
+        email: '',
+        password: '',
+        confirmPassword: '',
+        fio: '',
+        isValidation: false,
+        errors: {
+            email: ""
+        }
     }
 
     onSubmitHandler = (e) => {
         e.preventDefault();
+        // const {email} = this.state;
+        // if(!email)
+        // {
+        //     this.setState({errors: {email: "пуста пота"}});
+        // }
+        
+        var errors = validationFields(this.state);
+        this.setState({errors: errors, isValidation: true});
         console.log("Наш стейт", this.state);
+        
         //this.setState({"email": "222"});
     }
     onChangeHandler = (e) => {
         const {name, value} = e.target;
         //console.log(name, value);
-        this.setState({[name]: value});
+        const {isValidation} = this.state;
+        if(isValidation)
+        {
+            const data = { ...this.state,
+                            [name]: value };
+            const errors = validationFields(data);
+            this.setState({[name]: value, errors: errors});
+        }
+        else
+            this.setState({[name]: value});
     }
     render() {
         //console.log(this.state);
+        const {errors} = this.state;
         return (
             <div className="row">
                 <h1 className="text-center">Реєстрація</h1>
                 <div className="offset-md-3 col-md-6">
                     <form onSubmit={this.onSubmitHandler}>
-                        <div className="mb-3">
-                            <label htmlFor="email">Пошта</label>
-                            <input type="text"
-                                className="form-control" 
-                                id="email"
-                                name="email"
-                                value={this.state.email}
-                                onChange={this.onChangeHandler}
-                                placeholder="Вкажіть пошту" />
-                        </div>
+                        
+                        <InputTextField
+                            field="fio"
+                            label="ПІБ"
+                            value={this.state.fio}
+                            error={errors.fio}
+                            onChange={this.onChangeHandler}
+                         />
 
-                        <div className="mb-3">
-                            <label htmlFor="password">Пароль</label>
-                            <input type="password"
-                                className="form-control" 
-                                id="password"
-                                name="password"
-                                value={this.state.password}
-                                onChange={this.onChangeHandler}
-                                placeholder="Вкажіть пароль" />
-                        </div>
+                        <InputTextField
+                            field="email"
+                            label="Пошта"
+                            value={this.state.email}
+                            error={errors.email}
+                            onChange={this.onChangeHandler}
+                         />
+
+                        <InputTextField
+                            field="password"
+                            label="Пароль"
+                            value={this.state.password}
+                            error={errors.password}
+                            onChange={this.onChangeHandler}
+                            type="password"
+                         />
+
+                         <InputTextField
+                            field="confirmPassword"
+                            label="Повтор пароль"
+                            value={this.state.confirmPassword}
+                            error={errors.confirmPassword}
+                            onChange={this.onChangeHandler}
+                            type="password"
+                         />
 
                         <button type="submit" className="btn btn-success">Реєстрація</button>
                     </form>
