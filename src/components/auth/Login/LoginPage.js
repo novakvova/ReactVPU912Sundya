@@ -9,9 +9,7 @@ export class LoginPage extends Component {
         isValidation: false,
         errors: {
             email: '',
-            password: '',
-            confirmPassword: '',
-            fio: '',
+            password: ''
         }
     }
 
@@ -68,7 +66,7 @@ export class LoginPage extends Component {
 
                         
 
-                        <button type="submit" className="btn btn-success">Реєстрація</button>
+                        <button type="submit" className="btn btn-dark">Вхід</button>
                     </form>
                 </div>
             </div>
