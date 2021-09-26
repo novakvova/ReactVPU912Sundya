@@ -9,11 +9,15 @@ const InputTextField = ({
     type,
     onChange
 }) => {
+    console.log("error", error);
     return (
         <div className="mb-3">
             <label htmlFor={field}>{label}</label>
             <input type={type}
-                className={classnames("form-control", { "is-invalid": error })}
+                className={classnames("form-control", 
+                    { "is-invalid": error },
+                    { "is-valid": error==undefined }
+                    )}
                 id={field}
                 name={field}
                 value={value}

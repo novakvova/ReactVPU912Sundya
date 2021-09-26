@@ -10,23 +10,31 @@ export class RegisterPage extends Component {
         fio: '',
         isValidation: false,
         errors: {
-            email: ""
+            email: '',
+            password: '',
+            confirmPassword: '',
+            fio: '',
         }
     }
 
     onSubmitHandler = (e) => {
         e.preventDefault();
-        // const {email} = this.state;
-        // if(!email)
-        // {
-        //     this.setState({errors: {email: "пуста пота"}});
-        // }
         
         var errors = validationFields(this.state);
-        this.setState({errors: errors, isValidation: true});
-        console.log("Наш стейт", this.state);
+        const isValid = Object.keys(errors).length === 0;
+        if(isValid)
+        {
+            // let json = JSON.parse(this.state);
+            // alert(json);
+            console.log("send server", this.state);
+        }
+        else{
+            this.setState({errors: errors, isValidation: true});
+        }
         
-        //this.setState({"email": "222"});
+
+
+        //console.log("Наш стейт", this.state);
     }
     onChangeHandler = (e) => {
         const {name, value} = e.target;
