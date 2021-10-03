@@ -1,18 +1,14 @@
-export function validationFields(items) {
-    let errors={};
-    const { email, password } = items;
-    const regex_email = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/;
+import * as Yup from 'yup';
 
-    if (!regex_email.test(email.trim())) errors.email = "Не правильний формат електронної пошти!";
-
-  
-    if(password.trim()=='')
-    {
-        errors={
-            ...errors,
-            password: "Поле пароль пуста"
-        }
-    }
-
-    return errors;
+const validationFields= () => {
+    return Yup.object({
+        email: Yup.string()
+            .email('Не коректно вказана пошта')
+            .required("Вкажіть пошту"),
+        password: Yup.string()
+            .required('Вкажіть пароль.') 
+            .min(5, 'Пароль має містить мінімум 5 символів.')
+            .matches(/[a-zA-Z]/, 'Пароль має містить латинські символи.')
+    });
 }
+export default validationFields;

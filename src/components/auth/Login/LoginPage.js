@@ -1,77 +1,49 @@
-import React, { Component } from 'react'
-import InputTextField from '../../common/InptTextField';
-import { validationFields } from './validation';
+import React from 'react'
+import validationFields from './validation';
+import { Formik, Form } from 'formik';
+import MyTextInput from '../../common/MyTextInput';
 
-export class LoginPage extends Component {
-    state = {
+const LoginPage = () => {
+
+    const initState = {
         email: '',
-        password: '',
-        isValidation: false,
-        errors: {
-            email: '',
-            password: ''
-        }
+        password: ''
+    };
+
+    const onSubmitHandler = (values) => {
+        console.log("Server submit data", values);
     }
 
-    onSubmitHandler = (e) => {
-        e.preventDefault();
-        var errors = validationFields(this.state);
-        const isValid = Object.keys(errors).length === 0;
-        if(isValid)
-        {
-            console.log("send server", this.state);
-        }
-        else{
-            this.setState({errors: errors, isValidation: true});
-        }
-    }
-    onChangeHandler = (e) => {
-        const {name, value} = e.target;
-        const {isValidation} = this.state;
-        if(isValidation)
-        {
-            const data = { ...this.state,
-                            [name]: value };
-            const errors = validationFields(data);
-            this.setState({[name]: value, errors: errors});
-        }
-        else
-            this.setState({[name]: value});
-    }
-    render() {
-        const {errors} = this.state;
-        return (
-            <div className="row">
-                <h1 className="text-center">Вхід на сайт</h1>
-                <div className="offset-md-3 col-md-6">
-                    <form onSubmit={this.onSubmitHandler}>
-                        
 
-                        <InputTextField
-                            field="email"
-                            label="Пошта"
-                            value={this.state.email}
-                            error={errors.email}
-                            onChange={this.onChangeHandler}
-                         />
+    return (
+        <div className="row">
+            <h1 className="text-center">Вхід</h1>
+            <div className="offset-md-3 col-md-6">
+                <Formik
+                    initialValues={initState}
+                    onSubmit={onSubmitHandler}
+                    validationSchema={validationFields()}>
+                    <Form>
 
-                        <InputTextField
-                            field="password"
+                        <MyTextInput
+                            label="Електронна пошта"
+                            name="email"
+                            id="email"
+                            type="text"
+                        />
+                        <MyTextInput
                             label="Пароль"
-                            value={this.state.password}
-                            error={errors.password}
-                            onChange={this.onChangeHandler}
+                            name="password"
+                            id="password"
                             type="password"
-                         />
+                        />
 
-                        
-
-                        <button type="submit" className="btn btn-dark">Вхід</button>
-                    </form>
-                </div>
+                        <button type="submit" className="btn btn-success">Логін</button>
+                    </Form>
+                </Formik>
             </div>
-        )
-    }
+        </div>
+    );
 }
 
-export default LoginPage
+export default LoginPage;
