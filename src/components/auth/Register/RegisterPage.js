@@ -59,16 +59,6 @@ const RegisterPage = () => {
                             formikRef={formikRef}
                         
                         />
-                        {/* <input
-                            label="Фото"
-                            name="photo"
-                            type="file"
-                            onChange={(event) => {
-                                formikRef.current.setFieldValue(
-                                    "photo", event.currentTarget.files[0]
-                                  );
-                              }}
-                        /> */}
 
                         <MyTextInput
                             label="Пароль"
