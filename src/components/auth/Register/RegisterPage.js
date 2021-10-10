@@ -3,6 +3,7 @@ import validationFields from './validation';
 import { Formik, Form} from 'formik';
 import MyTextInput from '../../common/MyTextInput';
 import MyPhotoInput from '../../common/MyPhotoInput';
+import http from "../../../http_common";
 
 const RegisterPage = () => {
 
@@ -17,17 +18,32 @@ const RegisterPage = () => {
     const formikRef = useRef();
 
     const onSubmitHandler = (values) => {
-        console.log("Server submit data", values);
 
-        console.log("Server submit file", JSON.stringify(
-            { 
-              fileName: values.photo.name, 
-              type: values.photo.type,
-              size: `${values.photo.size} bytes`
-            },
-            null,
-            2
-          ));
+        //Робимо форму, у якій можна відправити файл
+        const formData = new FormData();
+        //formData.append("email", values.email);
+        //у форічі біжимо по initState і передаємо дані в форму 
+        //key - email, value-ff@dd.dd
+        Object.entries(values).forEach(([key, value]) => formData.append(key, value));
+
+        http.post("api/account/register", formData,
+        {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+
+        // console.log("Server submit data", values);
+
+        // console.log("Server submit file", JSON.stringify(
+        //     { 
+        //       fileName: values.photo.name, 
+        //       type: values.photo.type,
+        //       size: `${values.photo.size} bytes`
+        //     },
+        //     null,
+        //     2
+        //   ));
     }
 
 
@@ -54,10 +70,12 @@ const RegisterPage = () => {
                             id="email"
                             type="text"
                         />
+
                         <MyPhotoInput
-                            field="photo"
+                            myField="photo"
+                            name="photo"
+                            id="photo"
                             formikRef={formikRef}
-                        
                         />
 
                         <MyTextInput

@@ -7,6 +7,8 @@ const validationFields= () => {
             .required("Вкажіть пошту"),
         fio: Yup.string()
             .required("Вкажіть ПІБ"),
+        photo: Yup.mixed()
+            .required("Вкажіть фото"),
         password: Yup.string()
             .required('Вкажіть пароль.') 
             .min(5, 'Пароль має містить мінімум 5 символів.')
