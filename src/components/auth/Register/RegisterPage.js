@@ -1,9 +1,10 @@
-import React, {useRef} from 'react'
+import React, {useRef, useState} from 'react'
 import validationFields from './validation';
 import { Formik, Form} from 'formik';
 import MyTextInput from '../../common/MyTextInput';
 import MyPhotoInput from '../../common/MyPhotoInput';
 import http from "../../../http_common";
+import { useHistory } from 'react-router';
 
 const RegisterPage = () => {
 
@@ -16,6 +17,9 @@ const RegisterPage = () => {
     };
 
     const formikRef = useRef();
+    const titleRef = useRef();
+    const [invalid, setInvalid] = useState([]);
+    const history = useHistory();
 
     const onSubmitHandler = (values) => {
 
@@ -32,9 +36,19 @@ const RegisterPage = () => {
                 'Content-Type': 'multipart/form-data'
             }
         }).then(resp => {
-            console.log("Good Result", resp);
+            history.push("/");
         }, bad =>{
+            const errors = bad.response.data.errors;
+
+            Object.entries(errors).forEach(([key, values]) => {
+                let message = '';
+                values.forEach(text=> message+=text+" ");
+                formikRef.current.setFieldError(key,message);
+            });
+
+            setInvalid(errors.invalid);
             console.log(bad.response.data);
+            titleRef.current.scrollIntoView({ behavior: 'smooth' })
         });
 
         // console.log("Server submit data", values);
@@ -53,7 +67,25 @@ const RegisterPage = () => {
 
     return (
         <div className="row">
-            <h1 className="text-center">Реєстрація</h1>
+            <h1 ref={titleRef} className="text-center">Реєстрація</h1>
+
+            {
+                invalid && invalid.length > 0 &&
+                <div className="alert alert-danger">
+                    <ul>
+                        {
+                            invalid.map((text, index) => {
+                                return (
+                                    <li key={index}>{text}</li>
+
+                                );
+                            })
+                        }
+                    </ul>
+                </div>
+
+            }
+
             <div className="offset-md-3 col-md-6">
                 <Formik
                     innerRef={formikRef}
