@@ -3,8 +3,9 @@ import validationFields from './validation';
 import { Formik, Form} from 'formik';
 import MyTextInput from '../../common/MyTextInput';
 import MyPhotoInput from '../../common/MyPhotoInput';
-import http from "../../../http_common";
 import { useHistory } from 'react-router';
+import { useDispatch } from 'react-redux';
+import { RegisterUser } from '../../../actions/auth';
 
 const RegisterPage = () => {
 
@@ -21,6 +22,8 @@ const RegisterPage = () => {
     const [invalid, setInvalid] = useState([]);
     const history = useHistory();
 
+    const dispatch = useDispatch();
+
     const onSubmitHandler = (values) => {
 
         //Робимо форму, у якій можна відправити файл
@@ -30,38 +33,21 @@ const RegisterPage = () => {
         //key - email, value-ff@dd.dd
         Object.entries(values).forEach(([key, value]) => formData.append(key, value));
 
-        http.post("api/account/register", formData,
-        {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        }).then(resp => {
-            history.push("/");
-        }, bad =>{
-            const errors = bad.response.data.errors;
+        dispatch(RegisterUser(formData))
+            .then(result => {
+                history.push("/");
+            })
+            .catch(ex => {
+                const {errors} = ex;
+                Object.entries(errors).forEach(([key, values]) => {
+                    let message = '';
+                    values.forEach(text => message += text + " ");
+                    formikRef.current.setFieldError(key, message);
+                });
 
-            Object.entries(errors).forEach(([key, values]) => {
-                let message = '';
-                values.forEach(text=> message+=text+" ");
-                formikRef.current.setFieldError(key,message);
+                setInvalid(errors.invalid);
+                titleRef.current.scrollIntoView({ behavior: 'smooth' })
             });
-
-            setInvalid(errors.invalid);
-            console.log(bad.response.data);
-            titleRef.current.scrollIntoView({ behavior: 'smooth' })
-        });
-
-        // console.log("Server submit data", values);
-
-        // console.log("Server submit file", JSON.stringify(
-        //     { 
-        //       fileName: values.photo.name, 
-        //       type: values.photo.type,
-        //       size: `${values.photo.size} bytes`
-        //     },
-        //     null,
-        //     2
-        //   ));
     }
 
 
