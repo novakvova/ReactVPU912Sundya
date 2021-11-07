@@ -8,6 +8,7 @@ import {
   Route
 } from "react-router-dom";
 import HomePage from "./components/home";
+import EditPage from "./components/edit";
 
 function App() {
   return (
@@ -25,6 +26,10 @@ function App() {
 
           <Route exact path="/register">
             <RegisterPage />
+          </Route>
+
+          <Route exact path="/user/edit/:id">
+            <EditPage />
           </Route>
         </Switch>
       </div>
