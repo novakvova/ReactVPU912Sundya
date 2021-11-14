@@ -7,6 +7,7 @@ import { useHistory } from 'react-router';
 import { useDispatch } from 'react-redux';
 import { useParams } from "react-router-dom";
 import UsersService from '../../services/users.service';
+import EclipseWidget from '../common/eclipse';
 
 const EditPage = () => {
 
@@ -20,6 +21,7 @@ const EditPage = () => {
     const titleRef = useRef();
     const [invalid, setInvalid] = useState([]);
     const [imagePath, setImagePath] = useState("");
+    const [loading, setLoading] = useState(true);
     const history = useHistory();
 
     const dispatch = useDispatch();
@@ -43,8 +45,7 @@ const EditPage = () => {
                     formikRef.current.setFieldValue("fio", data.fio);
                     formikRef.current.setFieldValue("email", data.email);
                     setImagePath("http://localhost:15247"+data.image);
-                    console.log("image path ", data.image);
-                    console.log("edit user", res.data);
+                    setLoading(false);
                 });
             
         }
@@ -111,6 +112,7 @@ const EditPage = () => {
                     </Form>
                 </Formik>
             </div>
+            {loading && <EclipseWidget/> }
         </div>
     );
 }
