@@ -12,6 +12,7 @@ import EclipseWidget from '../common/eclipse';
 const EditPage = () => {
 
     const initState = {
+        id: 0,
         email: '',
         fio: ''
     };
@@ -27,13 +28,11 @@ const EditPage = () => {
     const dispatch = useDispatch();
 
     const onSubmitHandler = (values) => {
-
-        //Робимо форму, у якій можна відправити файл
+        console.log("values", values)
         const formData = new FormData();
-        //formData.append("email", values.email);
-        //у форічі біжимо по initState і передаємо дані в форму 
-        //key - email, value-ff@dd.dd
         Object.entries(values).forEach(([key, value]) => formData.append(key, value));
+        UsersService.save(formData)
+            .then(res => history.push("/"));
     }
 
     useEffect(() => {
@@ -42,6 +41,7 @@ const EditPage = () => {
             UsersService.edit(id)
                 .then(res => {
                     const {data} = res;
+                    formikRef.current.setFieldValue("id", id);
                     formikRef.current.setFieldValue("fio", data.fio);
                     formikRef.current.setFieldValue("email", data.email);
                     setImagePath("http://localhost:15247"+data.image);
@@ -83,6 +83,13 @@ const EditPage = () => {
                     onSubmit={onSubmitHandler}
                     validationSchema={validationFields()}>
                     <Form>
+
+                        <MyTextInput
+                            name="id"
+                            id="id"
+                            type="hidden"
+                        />
+
                         <MyTextInput
                             label="ПІБ"
                             name="fio"
@@ -108,7 +115,7 @@ const EditPage = () => {
                         }
                         
 
-                        <button type="submit" className="btn btn-success">Реєстрація</button>
+                        <button type="submit" className="btn btn-success">Зберегти</button>
                     </Form>
                 </Formik>
             </div>
