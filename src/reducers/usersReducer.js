@@ -21,6 +21,10 @@ const usersReducer = (state=initialState, action) => {
             };   
         }
 
+        // case USER_EDIT: {
+
+        // }
+
         default: {
             return state;
         }

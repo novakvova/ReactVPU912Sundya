@@ -4,10 +4,11 @@ import { useField } from 'formik';
 const MyPhotoInput = ({
     myField,
     formikRef,
+    data,
     ...props
 }) => {
 
-    const [photo, setPhoto] = useState("https://bytes.ua/wp-content/uploads/2017/08/no-image.png");
+    const [photo, setPhoto] = useState(data ? data : "https://bytes.ua/wp-content/uploads/2017/08/no-image.png");
     const [error, setError] = useState("");
     const [field, meta] = useField(props);
 

@@ -19,6 +19,7 @@ const EditPage = () => {
     const formikRef = useRef();
     const titleRef = useRef();
     const [invalid, setInvalid] = useState([]);
+    const [imagePath, setImagePath] = useState("");
     const history = useHistory();
 
     const dispatch = useDispatch();
@@ -41,6 +42,8 @@ const EditPage = () => {
                     const {data} = res;
                     formikRef.current.setFieldValue("fio", data.fio);
                     formikRef.current.setFieldValue("email", data.email);
+                    setImagePath("http://localhost:15247"+data.image);
+                    console.log("image path ", data.image);
                     console.log("edit user", res.data);
                 });
             
@@ -93,12 +96,16 @@ const EditPage = () => {
                             type="text"
                         />
 
-                        <MyPhotoInput
-                            myField="photo"
-                            name="photo"
-                            id="photo"
-                            formikRef={formikRef}
-                        />
+                        {imagePath &&
+                            <MyPhotoInput
+                                myField="photo"
+                                name="photo"
+                                id="photo"
+                                data={imagePath}
+                                formikRef={formikRef}
+                            />
+                        }
+                        
 
                         <button type="submit" className="btn btn-success">Реєстрація</button>
                     </Form>
