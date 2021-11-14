@@ -6,6 +6,7 @@ import MyPhotoInput from '../common/MyPhotoInput';
 import { useHistory } from 'react-router';
 import { useDispatch } from 'react-redux';
 import { useParams } from "react-router-dom";
+import UsersService from '../../services/users.service';
 
 const EditPage = () => {
 
@@ -35,6 +36,13 @@ const EditPage = () => {
     useEffect(() => {
         try {
             console.log("id = ", id);
+            UsersService.edit(id)
+                .then(res => {
+                    const {data} = res;
+                    formikRef.current.setFieldValue("fio", data.fio);
+                    formikRef.current.setFieldValue("email", data.email);
+                    console.log("edit user", res.data);
+                });
             
         }
         catch(error) {
